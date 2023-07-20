@@ -1,0 +1,24 @@
+{
+  "name": "github-contribution",
+  "version": "1.0.0",
+  "description": "A  simple and flexible libarary for fetching your github contribution stats.",
+  "scripts": {
+    "build": "webpack",
+    "build:dev": "webpack --env dev",
+    "exec:dev": "node dist/github-contribution.js",
+    "test": "npm-run-all -s  build:dev exec:dev"
+  },
+  "author": "neil-ji",
+  "repository": "https://github.com/neil-ji/github-contribution.git",
+  "license": "Apache License 2.0",
+  "devDependencies": {
+    "@types/node": "^20.4.2",
+    "npm-run-all": "^4.1.5",
+    "ts-loader": "^9.4.4",
+    "webpack": "^5.88.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12"
+  }
+}
