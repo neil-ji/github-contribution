@@ -6,11 +6,16 @@ export interface ContributionItem {
 }
 
 export interface Contributions {
-  [key: string]: ContributionItem[];
+  lastYear?: ContributionItem[];
+  [key: string]: ContributionItem[] | undefined;
 }
 
 //TODO: support cache.
 export class GithubContribution {
+  // TODO: support merge contributions
+  // static mergeContributions(contributions: Contributions) {
+  // }
+
   private username: string;
   private allContributions: Contributions;
 
@@ -25,21 +30,25 @@ export class GithubContribution {
 
   public setContributions(
     contributionsOfOneYear: ContributionItem[],
-    year?: string
+    key?: keyof Contributions
   ) {
-    const key = year || new Date().getFullYear();
-    this.allContributions[key] = contributionsOfOneYear;
+    const _key = key || new Date().getFullYear();
+    this.allContributions[_key] = contributionsOfOneYear;
   }
 
   public async crawl(year?: string) {
     const result = await crawl(this.username, year);
-    this.setContributions(result, year);
+
+    if (this._isValidYear(year)) {
+      this.setContributions(result, year);
+    } else {
+      this.setContributions(result, "lastYear");
+    }
+
     return result;
   }
 
   public async crawlYears(years: string[] = []) {
-    if (!years.every(this._isValidYear)) return this.crawl();
-
     const result = await Promise.all(years.map(this.crawl));
     return result;
   }
