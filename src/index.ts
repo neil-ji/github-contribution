@@ -7,10 +7,10 @@ async function run(username: string, years?: string | string[]) {
   if (Array.isArray(years)) {
     await gc.crawlYears(years);
   } else {
-    await gc.crawlFrom(years);
+    await gc.crawl(years);
   }
 
-  await generateJsonFile(JSON.stringify(gc.getContributions()));
+  await generateJsonFile(JSON.stringify(gc.getContributions()), "./dist/");
 }
 
-run("neil-ji");
+run("neil-ji", "2022");
