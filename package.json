@@ -5,8 +5,8 @@
   "scripts": {
     "build": "webpack",
     "build:dev": "webpack --env dev",
-    "exec:dev": "node dist/github-contribution.js",
-    "test": "npm-run-all -s  build:dev exec:dev"
+    "exec": "node dist/github-contribution.js",
+    "json": "npm-run-all -s  build:dev exec"
   },
   "author": "neil-ji",
   "repository": "https://github.com/neil-ji/github-contribution.git",
@@ -19,6 +19,10 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.12"
+    "@types/signale": "^1.4.4",
+    "cheerio": "^1.0.0-rc.12",
+    "https-proxy-agent": "^7.0.1",
+    "node-fetch": "^3.3.1",
+    "signale": "^1.4.0"
   }
 }

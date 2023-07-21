@@ -1,5 +1,12 @@
 import { load } from "cheerio";
-import { ContributionItem } from "../index";
+import { ContributionItem } from "../contribution/index";
+import { signal, sortByDate } from "../util";
+import fetch from "node-fetch";
+import { HttpsProxyAgent } from "https-proxy-agent";
+
+function generateAgent() {
+  return new HttpsProxyAgent("http://127.0.0.1:7890");
+}
 
 // only support querying by each year.
 function getContributionUrl(username: string, year?: string) {
@@ -10,12 +17,12 @@ function getContributionUrl(username: string, year?: string) {
 // maybe need to set headers here.
 async function fetchHtml(url: string) {
   const headers = {};
-  const res = await fetch(url, { headers });
+  const res = await fetch(url, { headers, agent: generateAgent });
   const html = await res.text();
   return html;
 }
 
-async function extractContributions(html: string): Promise<ContributionItem[]> {
+function extractContributions(html: string): ContributionItem[] {
   const pattern = /^\d*/;
   const $ = load(html);
   const contributions: ContributionItem[] = $("table tbody tr td")
@@ -32,7 +39,8 @@ async function extractContributions(html: string): Promise<ContributionItem[]> {
     })
     .toArray();
 
-  console.log(contributions);
+  // default sort as asc
+  sortByDate(contributions, (item) => item.date);
 
   return contributions;
 }
@@ -43,5 +51,7 @@ export async function crawl(
 ): Promise<ContributionItem[]> {
   const url = getContributionUrl(username, year);
   const html = await fetchHtml(url);
-  return extractContributions(html);
+  const contributions = extractContributions(html);
+  signal.success(`${contributions.length} contribution items have been extracted successfully`);
+  return contributions;
 }

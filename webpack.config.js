@@ -13,6 +13,7 @@ module.exports = function (env) {
       },
     },
     entry: "./src/index.ts",
+    target: "node",
     output: {
       filename: "github-contribution.js",
       path: path.resolve(__dirname, "dist"),
