@@ -8,9 +8,8 @@ module.exports = function (env) {
   const isTest = env.test;
   const isPublish = env.publish;
 
+  let externalOptions = {};
   const plugins = [];
-  const externals = [];
-  const externalsPresets = {};
   const entry = {
     index: {
       import: "./src/index.ts",
@@ -39,16 +38,20 @@ module.exports = function (env) {
     };
   }
   if (isPublish) {
-    externals.push("arg", "cheerio", "signale");
-    externalsPresets.node = true;
+    externalOptions = {
+      externals: ["arg", "cheerio", "signale"],
+      externalsType: "commonjs",
+      externalsPresets: {
+        node: true,
+      },
+    };
   }
-  
+
   return {
+    ...externalOptions,
     mode: isDev ? "development" : "production",
     entry,
-    target: "commonjs",
-    externals,
-    externalsPresets,
+    target: "node",
     plugins,
     devtool: "source-map",
     output: {
