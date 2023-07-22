@@ -6,7 +6,7 @@ interface RunOptions {
   path?: string;
 }
 
-export async function run(options: RunOptions) {
+export default async function run(options: RunOptions) {
   const gc = new GithubContribution(options.username);
 
   if (Array.isArray(options.years)) {
