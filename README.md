@@ -82,6 +82,8 @@ Note: by default, an extension name '.json' will be set automatically, and if yo
 
 ### Use `github-contribution` with CLI
 
+It's useful while you try to integrate `github-contribution` into Github Actions or local scripts.
+
 ### Global installation VS Local Installation
 
 If you want to install `github-contribution` global, run the command:
@@ -90,13 +92,7 @@ If you want to install `github-contribution` global, run the command:
 npm install github-contribution -g
 ```
 
-In this way, you can run `crawl -u "your name"` directly, otherwise, if you install it locally as this:
-
-```bash
-npm install github-contribution
-```
-
-You must config a npm script in your `package.json`, like this:
+In this way, you can run `crawl -u "your name"` directly, otherwise, if you install it locally(remove `-g`), then you have to config a npm script in your `package.json`, like this:
 
 ```json
 {
@@ -120,7 +116,7 @@ See more details about Global VS Local at below:
 
 ### CLI Usage
 
-It's useful while you try to integrate `github-contribution` into Github Actions or local scripts.
+basic usage like this:
 
 ```bash
 crawl --username "your name" --years "2023,2022,2021" --path "your path"
