@@ -18,7 +18,8 @@
     "build:publish": "webpack --env publish",
     "analyze:publish": "webpack --env report --env publish",
     "test": "npm run build:test && node ./dist/test.js",
-    "publish": "npm run build:publish && npm publish"
+    "publish:single": "npm publish",
+    "publish": "npm-run-all -s build:publish publish:single"
   },
   "license": "Apache License 2.0",
   "devDependencies": {
