@@ -10,6 +10,7 @@ module.exports = function (env) {
 
   const plugins = [];
   const externals = [];
+  const externalsPresets = {};
   const entry = {
     index: {
       import: "./src/index.ts",
@@ -39,10 +40,30 @@ module.exports = function (env) {
   }
   if (isPublish) {
     externals.push("arg", "cheerio", "signale");
+    externalsPresets.node = true;
   }
-
+  
   return {
     mode: isDev ? "development" : "production",
+    entry,
+    target: "commonjs",
+    externals,
+    externalsPresets,
+    plugins,
+    devtool: "source-map",
+    output: {
+      filename: "[name].js",
+      path: path.resolve(__dirname, "dist"),
+      clean: true,
+    },
+    module: {
+      rules: [
+        {
+          test: /.([cm]?ts|tsx)$/,
+          loader: "ts-loader",
+        },
+      ],
+    },
     resolve: {
       extensions: [".ts", ".tsx", ".js"],
       extensionAlias: {
@@ -51,31 +72,10 @@ module.exports = function (env) {
         ".mts": [".mjs", ".mts"],
       },
     },
-    entry,
-    target: "node",
-    externals,
-    output: {
-      filename: "[name].js",
-      path: path.resolve(__dirname, "dist"),
-      clean: true,
-    },
-    plugins,
-    module: {
-      rules: [
-        {
-          test: /.([cm]?ts|tsx)$/,
-          loader: "ts-loader",
-          // options: {
-          //   transpileOnly: true,
-          // },
-        },
-      ],
-    },
     optimization: {
       splitChunks: {
         chunks: "all",
       },
     },
-    devtool: "source-map",
   };
 };
