@@ -36,3 +36,18 @@ export const sortByDate = <T>(
     return !desc && sortTag ? 1 : -1;
   });
 };
+
+// inject node-fetch or any else fetch implements to instead of native fetch
+// Reasons: use node-fetch to set a proxy preventing connection timeout.
+interface FetchFunc {
+  (input: RequestInfo | URL, init?: RequestInit): Promise<Response>;
+}
+
+let fetchFunc: FetchFunc = fetch;
+export function injectFetch(_fetch: FetchFunc): void {
+  fetchFunc = _fetch || fetch;
+}
+
+export const __fetch: FetchFunc = (input, init) => {
+  return fetchFunc(input, init);
+};

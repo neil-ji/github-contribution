@@ -1,12 +1,6 @@
 import { load } from "cheerio";
 import { ContributionItem } from "../contribution/index";
-import { signal, sortByDate } from "../util";
-import fetch from "node-fetch";
-import { HttpsProxyAgent } from "https-proxy-agent";
-
-function generateAgent() {
-  return new HttpsProxyAgent("http://127.0.0.1:7890");
-}
+import { signal, sortByDate, __fetch } from "../util";
 
 // only support querying by each year.
 function getContributionUrl(username: string, year?: string) {
@@ -16,10 +10,8 @@ function getContributionUrl(username: string, year?: string) {
 
 // maybe need to set headers here.
 async function fetchHtml(url: string) {
-  const headers = {};
-  const res = await fetch(url, { headers, agent: generateAgent });
-  const html = await res.text();
-  return html;
+  const res = await __fetch(url);
+  return res.text();
 }
 
 function extractContributions(html: string): ContributionItem[] {

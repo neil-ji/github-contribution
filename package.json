@@ -1,24 +1,31 @@
 {
   "name": "github-contribution",
-  "version": "1.0.0",
-  "description": "A  simple and flexible libarary for fetching your github contribution stats.",
+  "version": "0.0.1",
+  "description": "A  simple and flexible library for fetching your github contribution stats.",
+  "types": "dist/src/index.d.ts",
+  "author": "neil-ji",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neil-ji/github-contribution.git"
+  },
   "bin": {
-    "githubc": "./bin/run.js"
+    "run": "./bin/cli.js"
   },
   "scripts": {
-    "analyze": "webpack --env report",
-    "build": "webpack",
     "build:dev": "webpack --env dev",
-    "exec": "node dist/github-contribution.js",
-    "json": "npm-run-all -s  build:dev exec"
+    "build:test": "webpack --env dev --env test",
+    "build:publish": "webpack --env dev --env publish",
+    "analyze:publish": "webpack --env report --env publish",
+    "test": "npm run build:test && node ./dist/test.js",
+    "publish": "npm run build:publish && npm publish"
   },
-  "author": "neil-ji",
-  "repository": "https://github.com/neil-ji/github-contribution.git",
   "license": "Apache License 2.0",
   "devDependencies": {
     "@types/node": "^20.4.2",
     "@types/signale": "^1.4.4",
     "@types/webpack": "^5.28.1",
+    "https-proxy-agent": "^7.0.1",
+    "node-fetch": "^3.3.1",
     "npm-run-all": "^4.1.5",
     "ts-loader": "^9.4.4",
     "webpack": "^5.88.1",
@@ -28,8 +35,6 @@
   "dependencies": {
     "arg": "^5.0.2",
     "cheerio": "^1.0.0-rc.12",
-    "https-proxy-agent": "^7.0.1",
-    "node-fetch": "^3.3.1",
     "signale": "^1.4.0"
   }
 }

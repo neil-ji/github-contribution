@@ -5,18 +5,42 @@ const BundleAnalyzerPlugin =
 module.exports = function (env) {
   const isDev = env.dev;
   const isReport = env.report;
+  const isTest = env.test;
+  const isPublish = env.publish;
+
   const plugins = [];
+  const externals = [];
+  const entry = {
+    index: {
+      import: "./src/index.ts",
+    },
+    run: {
+      import: "./src/script.ts",
+      dependOn: "index",
+    },
+  };
+
   if (isReport) {
     plugins.push(
       new BundleAnalyzerPlugin({
-        analyzerMode: "server", // 默认值：server，共有server，static，json，disabled四种模式
-        analyzerHost: "127.0.0.1", // 默认值：127.0.0.1，在server模式下使用的主机启动HTTP服务器。
-        analyzerPort: 9999, // 默认值：8888，在server模式下使用的端口号
-        reportFilename: "report.html", // 默认值：report.html，在static模式下生成的捆绑报告文件的路径名
-        openAnalyzer: true, // 默认值：true，是否在默认浏览器中自动打开报告
+        analyzerMode: "server",
+        analyzerHost: "127.0.0.1",
+        analyzerPort: 9999,
+        reportFilename: "report.html",
+        openAnalyzer: true,
       })
     );
   }
+  if (isTest) {
+    entry.test = {
+      import: "./src/test.ts",
+      dependOn: "index",
+    };
+  }
+  if (isPublish) {
+    externals.push("arg", "cheerio", "signale");
+  }
+
   return {
     mode: isDev ? "development" : "production",
     resolve: {
@@ -27,22 +51,11 @@ module.exports = function (env) {
         ".mts": [".mjs", ".mts"],
       },
     },
-    entry: {
-      index: {
-        import: "./src/index.ts",
-      },
-      run: {
-        import: "./src/script.ts",
-        dependOn: "index",
-      },
-    },
+    entry,
     target: "node",
+    externals,
     output: {
-      filename: (pathData) => {
-        return pathData.chunk.name !== "index" && pathData.chunk.name !== "run"
-          ? "runtime.[hash].js"
-          : "[name].js";
-      },
+      filename: "[name].js",
       path: path.resolve(__dirname, "dist"),
       clean: true,
     },
@@ -52,9 +65,9 @@ module.exports = function (env) {
         {
           test: /.([cm]?ts|tsx)$/,
           loader: "ts-loader",
-          options: {
-            transpileOnly: true,
-          },
+          // options: {
+          //   transpileOnly: true,
+          // },
         },
       ],
     },
@@ -63,5 +76,6 @@ module.exports = function (env) {
         chunks: "all",
       },
     },
+    devtool: "source-map",
   };
 };
