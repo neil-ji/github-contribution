@@ -52,6 +52,8 @@ export async function crawl(
   const url = getContributionUrl(username, year);
   const html = await fetchHtml(url);
   const contributions = extractContributions(html);
-  signal.success(`${contributions.length} contribution items have been extracted successfully`);
+  signal.success(
+    `${contributions.length} contribution items have been extracted successfully`
+  );
   return contributions;
 }

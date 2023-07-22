@@ -27,10 +27,22 @@ module.exports = function (env) {
         ".mts": [".mjs", ".mts"],
       },
     },
-    entry: ["./src/index.ts", "./src/run.ts"],
+    entry: {
+      index: {
+        import: "./src/index.ts",
+      },
+      run: {
+        import: "./src/script.ts",
+        dependOn: "index",
+      },
+    },
     target: "node",
     output: {
-      filename: "[name].js",
+      filename: (pathData) => {
+        return pathData.chunk.name !== "index" && pathData.chunk.name !== "run"
+          ? "runtime.[hash].js"
+          : "[name].js";
+      },
       path: path.resolve(__dirname, "dist"),
       clean: true,
     },
@@ -46,6 +58,10 @@ module.exports = function (env) {
         },
       ],
     },
-    // devtool: "inline-source-map",
+    optimization: {
+      splitChunks: {
+        chunks: "all",
+      },
+    },
   };
 };
