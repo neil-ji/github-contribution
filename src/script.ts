@@ -3,8 +3,7 @@ import { GithubContribution, generateJsonFile } from "./";
 interface RunOptions {
   username: string;
   years?: string | string[];
-  file?: string;
-  dir?: string;
+  path?: string;
 }
 
 export async function run(options: RunOptions) {
@@ -16,9 +15,5 @@ export async function run(options: RunOptions) {
     await gc.crawl(options.years);
   }
 
-  await generateJsonFile(
-    JSON.stringify(gc.getContributions()),
-    options.dir,
-    options.file
-  );
+  await generateJsonFile(JSON.stringify(gc.getContributions()), options.path);
 }

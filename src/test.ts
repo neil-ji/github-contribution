@@ -1,5 +1,6 @@
 import { HttpsProxyAgent } from "https-proxy-agent";
 import fetch from "node-fetch";
+import { join } from "path";
 import { generateJsonFile, injectFetch, GithubContribution } from "./";
 
 function applyProxyAgent() {
@@ -17,8 +18,7 @@ function applyProxyAgent() {
 interface RunOptions {
   username: string;
   years?: string | string[];
-  file?: string;
-  dir?: string;
+  path?: string;
 }
 
 async function run(options: RunOptions) {
@@ -32,18 +32,13 @@ async function run(options: RunOptions) {
     await gc.crawl(options.years);
   }
 
-  await generateJsonFile(
-    JSON.stringify(gc.getContributions()),
-    options.dir,
-    options.file
-  );
+  await generateJsonFile(JSON.stringify(gc.getContributions()), options.path);
 
   unsubscribe();
 }
 
 run({
   username: "neil-ji",
-  years: ["2022", "2021"],
-  dir: "./dist",
-  file: "contribution",
+  years: ["2023", "2022", "2021"],
+  path: join(process.cwd(), "dist", "contributions"),
 });

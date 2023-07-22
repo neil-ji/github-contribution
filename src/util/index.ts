@@ -1,29 +1,44 @@
 import { open } from "fs/promises";
+import { join, parse, ParsedPath } from "path";
 import signale from "signale";
 
 export const signal = signale;
 
+const normalizeJsonPath = (path?: ParsedPath | string): string => {
+  if (!path) return join(process.cwd(), "contributions.json");
+
+  const parsedPath = typeof path === "string" ? parse(path) : path;
+
+  const copy = { ...parsedPath };
+
+  if (!copy.name) {
+    copy.name = "contributions";
+  }
+
+  if (copy.ext !== ".json") {
+    copy.ext = ".json";
+    copy.base = copy.name + ".json";
+  }
+
+  return join(copy.dir, copy.base);
+};
+
 // generate JSON file from the string data.
-export const generateJsonFile = async (
-  json: string,
-  dir: string = __dirname,
-  name: string = "github.contributions"
-) => {
+export const generateJsonFile = async (json: string, path?: string) => {
+  const _path = normalizeJsonPath(path);
+
   let filehandle;
-
-  const src = `${dir}${name}.json`;
-
   try {
-    filehandle = await open(src, "w");
+    filehandle = await open(_path, "w");
     await filehandle.write(Buffer.from(json));
-    signal.success(`${src} has been generated successfully`);
+    signal.success(`${_path} has been generated successfully`);
   } catch (error) {
     signal.fatal(error);
   } finally {
     filehandle?.close();
   }
 
-  return src;
+  return _path;
 };
 
 export const sortByDate = <T>(

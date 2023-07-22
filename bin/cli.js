@@ -7,15 +7,13 @@ const args = arg(
   {
     // Types
     "--username": String,
-    "--file": String,
-    "--dir": String,
     "--years": String,
+    "--path": String,
 
     // Aliases
     "-u": "--username",
-    "-f": "--file",
-    "-d": "--dir",
     "-y": "--years",
+    "-p": "--path",
   },
   { argv: process.argv }
 );
@@ -26,11 +24,6 @@ if (!args["--username"]) {
 
 args["--years"] = args["--years"]?.split(",");
 
-const {
-  ["--username"]: username,
-  ["--file"]: file,
-  ["--dir"]: dir,
-  ["--years"]: years,
-} = args;
+const { ["--username"]: username, ["--years"]: years, ["--path"]: path } = args;
 
-run({ username, years, file, dir });
+run({ username, years, path });
