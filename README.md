@@ -2,25 +2,16 @@
 
 A simple and flexible Nodejs library for fetching your github contribution stats.
 
-Only support Nodejs, see the reason at [Limitations](https://github.com/neil-ji/github-contribution#usage).
+[![npm](https://img.shields.io/npm/v/github-contribution)](https://badge.fury.io/js/github-contribution) ![GitHub top language](https://img.shields.io/github/languages/top/neil-ji/github-contribution) [![GitHub Repo stars](https://img.shields.io/github/stars/neil-ji/github-contribution?label=Github%20stars)
+](https://github.com/neil-ji/github-contribution)
 
-Follow the [Usage guidelines](https://github.com/neil-ji/github-contribution#usage), it's simple that just passing your owner name and getting your contributions directly, by the way, it's simple also that generating a json file by use the exported function `generateJsonFile`.
+## Preface
 
-## About Github Contributions
+Please read below before you have a try of `github-contribution`:
 
-[Your contributions, including commits, proposed pull requests, and opened issues, are displayed on your profile so people can easily see the work you've done.](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/managing-contribution-settings-on-your-profile)
-
-By the way, there have no direct ways to get the contribution stats, instead, it is derived by `commits, pull requests, issues, etc.`, hence we have no choice but calculate it by counting those metrics. In this way, you have to create a github token, and getting the raw data from Github through Github RESTful Api(or `octokit`), then calculate your contributions by yourself.
-
-Is there really have no another simple choice? No, we have a hack method to get it: crawling the html from personal github homepage. In this way, our library will be simple but unstable because of we have to update our crawler every time when github updates their html structure.
-
-Sum up, you shouldn't hold too much wish on its stability until this lib supports fetching and calculating contributions by Github RESTful Api.
-
-## Limitations
-
-Because `github.com` have a strict [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/web/http/csp), we cannot fetch the github html from any cross-origin site in the modern browser. For bypassing this limitation implemented by modern browsers, We have to run the fetch code in a non-browser environment, such as Node.js.
-
-For some reasons above, this library only support for `Node.js`.
+- [About Github Contributions](#about-github-contributions)
+- Only support Nodejs, see the reason at [Limitations](#limitations).
+- Follow the [Usage guidelines](#usage), it's simple that just passing your owner name and getting your contributions directly, by the way, it's simple also that generating a json file by use the exported function `generateJsonFile`.
 
 ## Install
 
@@ -150,3 +141,19 @@ interface Contributions {
   [key: string]: ContributionItem[] | undefined;
 }
 ```
+
+## About Github Contributions
+
+[Your contributions, including commits, proposed pull requests, and opened issues, are displayed on your profile so people can easily see the work you've done.](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/managing-contribution-settings-on-your-profile)
+
+By the way, there have no direct ways to get the contribution stats, instead, it is derived by `commits, pull requests, issues, etc.`, hence we have no choice but calculate it by counting those metrics. In this way, you have to create a github token, and getting the raw data from Github through Github RESTful Api(or `octokit`), then calculate your contributions by yourself.
+
+Is there really have no another simple choice? No, we have a hack method to get it: crawling the html from personal github homepage. In this way, our library will be simple but unstable because of we have to update our crawler every time when github updates their html structure.
+
+Sum up, you shouldn't hold too much wish on its stability until this lib supports fetching and calculating contributions by Github RESTful Api.
+
+## Limitations
+
+Because `github.com` have a strict [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/web/http/csp), we cannot fetch the github html from any cross-origin site in the modern browser. For bypassing this limitation implemented by modern browsers, We have to run the fetch code in a non-browser environment, such as Node.js.
+
+For some reasons above, this library only support for `Node.js`.
