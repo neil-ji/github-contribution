@@ -2,6 +2,7 @@
   "name": "github-contribution",
   "version": "0.0.1",
   "description": "A  simple and flexible library for fetching your github contribution stats.",
+  "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
   "author": "neil-ji",
   "repository": {
@@ -9,12 +10,12 @@
     "url": "https://github.com/neil-ji/github-contribution.git"
   },
   "bin": {
-    "run": "./bin/cli.js"
+    "run": "bin/cli.js"
   },
   "scripts": {
     "build:dev": "webpack --env dev",
     "build:test": "webpack --env dev --env test",
-    "build:publish": "webpack --env dev --env publish",
+    "build:publish": "webpack --env publish",
     "analyze:publish": "webpack --env report --env publish",
     "test": "npm run build:test && node ./dist/test.js",
     "publish": "npm run build:publish && npm publish"
