@@ -82,25 +82,67 @@ Note: by default, an extension name '.json' will be set automatically, and if yo
 
 ### Use `github-contribution` with CLI
 
-It's useful when you integrate `github-contribution` into Github Actions or local scripts.
+### Global installation VS Local Installation
+
+If you want to install `github-contribution` global, run the command:
 
 ```bash
-githubc run --username "your name" --years "2023,2022,2021" --path "your path"
+npm install github-contribution -g
+```
+
+In this way, you can run `crawl -u "your name"` directly, otherwise, if you install it locally as this:
+
+```bash
+npm install github-contribution
+```
+
+You must config a npm script in your `package.json`, like this:
+
+```json
+{
+  "name": "github-contribution-test",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    // look at here
+    "crawl": "crawl"
+  },
+  "author": ""
+}
+```
+
+Then you can run the command `npm run crawl -u "your name"`, it is equal to `crawl -u "your name"` while install globally.
+
+See more details about Global VS Local at below:
+
+- [Downloading and installing packages locally](https://docs.npmjs.com/downloading-and-installing-packages-locally)
+- [Downloading and installing packages globally](https://docs.npmjs.com/downloading-and-installing-packages-globally)
+
+### CLI Usage
+
+It's useful while you try to integrate `github-contribution` into Github Actions or local scripts.
+
+```bash
+crawl --username "your name" --years "2023,2022,2021" --path "your path"
 ```
 
 or use the Abbr arguments:
 
 ```bash
-githubc run -u "your name" -y "2023,2022,2021" -p "your path"
+crawl -u "your name" -y "2023,2022,2021" -p "your path"
 ```
 
 Fell free about the optional arguments `--path` and `--years` that they have a default value, and you can use it like this:
 
 ```bash
-githubc run -u "your name"
+crawl -u "your name"
 ```
 
-enough simple, right? It's recommended specifying other arguments while you really need it.
+enough simple, right? It's recommended specifying other arguments while you really need it:
+
+- `--username, -u`: your github username.
+- `--years, -y`: time range for your contributions, and split multiple years by `,`, for example:`2021,2022,2023`.
+- `--path, -p`: specify path of generated json file, it's recommended using `path.join` to normalize your path string.
 
 ## Definitions
 

@@ -10,7 +10,7 @@
     "url": "https://github.com/neil-ji/github-contribution.git"
   },
   "bin": {
-    "crawl-contributions": "bin/cli.js"
+    "crawl": "bin/cli.js"
   },
   "scripts": {
     "build:dev": "webpack --env dev",
