@@ -14,12 +14,17 @@ module.exports = function (env) {
     index: {
       import: "./src/index.ts",
     },
-    run: {
-      import: "./src/script.ts",
-      dependOn: "index",
+    // split run function as single chunk
+    scripts: {
+      import: "./src/scripts/index.ts",
+      dependOn: "index", // remove shard dependencies
+      library: {
+        type: "commonjs2", // export run function as module.exports.run
+      },
     },
   };
 
+  // support dependencies analyze
   if (isReport) {
     plugins.push(
       new BundleAnalyzerPlugin({
@@ -31,12 +36,16 @@ module.exports = function (env) {
       })
     );
   }
+
+  // test local function
   if (isTest) {
     entry.test = {
       import: "./src/test.ts",
       dependOn: "index",
     };
   }
+
+  // remove external dependencies while publish
   if (isPublish) {
     externalOptions = {
       externals: ["arg", "cheerio", "signale"],
@@ -51,9 +60,9 @@ module.exports = function (env) {
     ...externalOptions,
     mode: isDev ? "development" : "production",
     entry,
-    target: "node",
+    target: "node", // prevent build node.js built-in module into output
     plugins,
-    devtool: "source-map",
+    devtool: "inline-source-map", // offer semantic code information for users
     output: {
       filename: "[name].js",
       path: path.resolve(__dirname, "dist"),

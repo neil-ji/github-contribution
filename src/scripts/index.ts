@@ -1,4 +1,5 @@
-import { GithubContribution, generateJsonFile } from "./";
+import { GithubContribution } from "../contribution";
+import { generateJsonFile } from "../util";
 
 interface RunOptions {
   username: string;
@@ -6,7 +7,7 @@ interface RunOptions {
   path?: string;
 }
 
-export default async function run(options: RunOptions) {
+export async function run(options: RunOptions) {
   const gc = new GithubContribution(options.username);
 
   if (Array.isArray(options.years)) {

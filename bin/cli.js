@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const run = require("../dist/run");
+const { run } = require("../dist/scripts.js");
 const arg = require("arg");
 
 // parse the arguments passed by user
@@ -19,7 +19,7 @@ const args = arg(
 );
 
 if (!args["--username"]) {
-  throw new Error("missing required argument: --name");
+  throw new Error("missing required argument: --username or -u");
 }
 
 args["--years"] = args["--years"]?.split(",");
