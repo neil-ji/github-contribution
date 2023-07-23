@@ -7,11 +7,10 @@ A simple and flexible Nodejs library for fetching your github contribution stats
 
 ## Preface
 
-Please read below before you have a try of `github-contribution`:
+Please read below before use `github-contribution`:
 
 - [About Github Contributions](#about-github-contributions)
 - Only support Nodejs, see the reason at [Limitations](#limitations).
-- Follow the [Usage guidelines](#usage), it's simple that just passing your owner name and getting your contributions directly, by the way, it's simple also that generating a json file by use the exported function `generateJsonFile`.
 
 ## Install
 
