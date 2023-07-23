@@ -22,23 +22,23 @@ interface RunOptions {
 }
 
 async function run(options: RunOptions) {
-  const gc = new GithubContribution(options.username);
+  const inst = new GithubContribution(options.username);
 
-  const unsubscribe = gc.subscribe(applyProxyAgent, true);
+  const unsubscribe = inst.subscribe(applyProxyAgent, true);
 
   if (Array.isArray(options.years)) {
-    await gc.crawlYears(options.years);
+    await inst.crawlYears(options.years);
   } else {
-    await gc.crawl(options.years);
+    await inst.crawl(options.years);
   }
 
-  await generateJsonFile(JSON.stringify(gc.getContributions()), options.path);
+  const filename = await generateJsonFile(JSON.stringify(inst.data));
 
   unsubscribe();
 }
 
 run({
   username: "neil-ji",
-  years: ["2023", "2022", "2021"],
+  // years: ["2023", "2022", "2021"],
   path: join(process.cwd(), "dist", "contributions"),
 });

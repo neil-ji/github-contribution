@@ -45,7 +45,9 @@ export async function crawl(
   const html = await fetchHtml(url);
   const contributions = extractContributions(html);
   signal.success(
-    `It have been extracted successfully that [${contributions.length}] contribution items in [${year}]`
+    `It have been extracted successfully that [${
+      contributions.length
+    }] contribution items in [${year || "last year"}]`
   );
   return contributions;
 }

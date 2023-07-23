@@ -28,9 +28,9 @@ export class GithubContribution {
     this.afterCallbacks = [];
   }
 
-  public getContributions = () => {
+  public get data() {
     return this.allContributions;
-  };
+  }
 
   public subscribe = (hook: () => void, before?: boolean) => {
     const target = before ? this.beforeCallbacks : this.afterCallbacks;
@@ -51,26 +51,12 @@ export class GithubContribution {
 
     this._setContributions(result, this._isValidYear(year) ? year : "lastYear");
 
-    return result;
+    return this.data;
   };
 
   public crawlYears = async (years: string[] = []) => {
-    const result = await Promise.all(years.map(this.crawl));
-    return result;
-  };
-
-  public crawlFrom = async (year?: string, maxYears: number = 20) => {
-    if (!this._isValidYear(year)) return this.crawl();
-
-    let count = maxYears;
-    let start = Number(year);
-    const end = new Date().getFullYear();
-
-    while (start < end && count < maxYears) {
-      this.crawl(String(start));
-      start++;
-      count++;
-    }
+    await Promise.all(years.map(this.crawl));
+    return this.data;
   };
 
   private _isValidYear(year?: string) {

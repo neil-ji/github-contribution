@@ -25,15 +25,34 @@ npm install github-contribution
 
 ### Basic usage(Support Typescript)
 
+Use promise handle the data:
+
 ```ts
 import { GithubContribution } from "github-contribution";
 
 const instance = new GithubContribution("your github owner name");
 
-// Note: contributionItems is not equal instance.getContributions(), see details at section Definitions.
-instance.crawl().then((contributionItems) => {
-  console.log(instance.getContributions());
+instance.crawl().then((data) => {
+  // do something
 });
+```
+
+`data` structure example:
+
+```ts
+{
+  lastYear: [
+    {date: Date, value: string},
+    {date: Date, value: string},
+    // ...
+  ],
+  "2023": [
+    {date: Date, value: string},
+    {date: Date, value: string},
+    // ...
+  ],
+  // ...
+}
 ```
 
 It's recommended that wrap all the codes into an async function:
@@ -42,9 +61,9 @@ It's recommended that wrap all the codes into an async function:
 async function myContributionsCrawler(username: string) {
   const instance = new GithubContribution(username);
 
-  const intermediateData = await instance.crawl();
+  const data = await instance.crawl();
 
-  return instance.getContributions().lastYear;
+  return data.lastYear; // equal to instance.data.lastYear
 }
 ```
 
@@ -56,7 +75,7 @@ async function myContributionsCrawler(username: string) {
 
   const intermediateData = await instance.crawl("2023");
 
-  return instance.getContributions()["2023"];
+  return instance.data["2023"];
 }
 ```
 
@@ -66,14 +85,17 @@ async function myContributionsCrawler(username: string) {
 import { GithubContribution, generateJsonFile } from "github-contribution";
 import { join } from "path";
 
-const instance = new GithubContribution("your github owner name");
+async function run(username: string) {
+  const instance = new GithubContribution(username);
 
-instance.crawl().then((contributionItems) => {
-  generateJsonFile(
-    instance.getContributions(),
-    join(__dirname, "dist", "myContributions")
-  );
-});
+  const data = await instance.crawl("2023");
+
+  const path = join(__dirname, "dist", "myContributions");
+
+  const filename = await generateJsonFile(data, path);
+
+  return filename;
+}
 ```
 
 You can find the details about how to use the nodejs built-in module 'path' at [Path - Node.js v18.17.0](https://nodejs.org/dist/latest-v18.x/docs/api/path.html).
@@ -82,17 +104,19 @@ Note: by default, an extension name '.json' will be set automatically, and if yo
 
 ### Use `github-contribution` with CLI
 
+It will crawl and generate a json file automatically.
+
 It's useful while you try to integrate `github-contribution` into Github Actions or local scripts.
 
 ### Global installation VS Local Installation
 
-If you want to install `github-contribution` global, run the command:
+If you want to install `github-contribution` global, run command below, and in this way, you can run `crawl -u "your name"` directly:
 
 ```bash
 npm install github-contribution -g
 ```
 
-In this way, you can run `crawl -u "your name"` directly, otherwise, if you install it locally(remove `-g`), then you have to config a npm script in your `package.json`, like this:
+If you install it locally(remove `-g`), then you have to config a npm script in your `package.json`, like this:
 
 ```json
 {
@@ -107,78 +131,74 @@ In this way, you can run `crawl -u "your name"` directly, otherwise, if you inst
 }
 ```
 
-Then you can run the command `npm run crawl -u "your name"`, it is equal to `crawl -u "your name"` while install globally.
+Run the command `npm run crawl -u "your name"`, it is equal to `crawl -u "your name"` now.
 
-See more details about Global VS Local at below:
+See more details about Global VS Local:
 
 - [Downloading and installing packages locally](https://docs.npmjs.com/downloading-and-installing-packages-locally)
 - [Downloading and installing packages globally](https://docs.npmjs.com/downloading-and-installing-packages-globally)
 
 ### CLI Usage
 
-basic usage like this:
+basic usage:
 
 ```bash
-crawl --username "your name" --years "2023,2022,2021" --path "your path"
+crawl --username "your-name"
 ```
 
-or use the Abbr arguments:
+or use the Abbr arguments(`--username = -u, --years = -y, --path = -p`):
 
 ```bash
-crawl -u "your name" -y "2023,2022,2021" -p "your path"
+crawl -u "your-name"
 ```
 
-Fell free about the optional arguments `--path` and `--years` that they have a default value, and you can use it like this:
+specify path of the json file, default path is your project root path and filename is `github-contributions.json`:
 
 ```bash
-crawl -u "your name"
+crawl -u "your-name" -p "/your-path/your-filename.json"
 ```
 
-enough simple, right? It's recommended specifying other arguments while you really need it:
+specify range of the contributions, default is last year:
+
+```bash
+crawl -u "your-name" -p "your-path" -y "2023,2022,2021"
+```
+
+enough simple, right? It's recommended specifying arguments while you really need it:
 
 - `--username, -u`: your github username.
 - `--years, -y`: time range for your contributions, and split multiple years by `,`, for example:`2021,2022,2023`.
 - `--path, -p`: specify path of generated json file, it's recommended using `path.join` to normalize your path string.
 
-## Definitions
+## Advanced Usage
 
-### class `GithubContribution`
+Example 1: fetch through proxy.
 
-public method of `GithubContribution` at bellow.
-
-```ts
-class GithubContribution {
-  constructor(username: string);
-  getContributions: () => Contributions;
-  subscribe: (hook: () => void, before?: boolean) => () => void;
-  crawl: (year?: string) => Promise<ContributionItem[]>;
-  crawlYears: (years?: string[]) => Promise<ContributionItem[][]>;
-  crawlFrom: (
-    year?: string,
-    maxYears?: number
-  ) => Promise<ContributionItem[] | undefined>;
-}
-```
-
-### type of `Contributions`
-
-Access contributions use `getContributions`.
-
-If you specify `year(s)`, it will crawl contributions of each years and the corresponding years will be set as keys, for example: `{ 2023: [...contributions...] }`
-
-If you do not pass a valid parameter `year`, it will crawl the contributions of last year by default, you can access it use the key `lastYear`.
+It's useful for some people which cannot establish connection directly with github server.
 
 ```ts
-interface ContributionItem {
-  date: Date;
-  value: string;
+import { injectFetch } from "github-contribution";
+import { HttpsProxyAgent } from "https-proxy-agent";
+import fetch from "node-fetch";
+
+function applyProxyAgent() {
+  const agent = new HttpsProxyAgent("http://127.0.0.1:7890");
+
+  function myFetch(input: any, init: any) {
+    return fetch(input, {
+      ...init,
+      agent,
+    });
+  }
+  injectFetch(myFetch as any);
 }
 
-interface Contributions {
-  lastYear?: ContributionItem[];
-  [key: string]: ContributionItem[] | undefined;
-}
+const inst = new GithubContribution(options.username);
+
+const unsubscribe = inst.subscribe(applyProxyAgent, true);
 ```
+
+Example 2: create your GithubContribution class by base api `crawl(username: string, year?: string): Promise<ContributionItem[]>`
 
 ## About Github Contributions
 

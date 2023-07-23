@@ -8,13 +8,13 @@ interface RunOptions {
 }
 
 export async function run(options: RunOptions) {
-  const gc = new GithubContribution(options.username);
+  const inst = new GithubContribution(options.username);
 
   if (Array.isArray(options.years)) {
-    await gc.crawlYears(options.years);
+    await inst.crawlYears(options.years);
   } else {
-    await gc.crawl(options.years);
+    await inst.crawl(options.years);
   }
 
-  await generateJsonFile(JSON.stringify(gc.getContributions()), options.path);
+  await generateJsonFile(JSON.stringify(inst.data), options.path);
 }
