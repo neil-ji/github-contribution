@@ -22,7 +22,7 @@ npm install github-contribution
 
 ## Usage
 
-### Basic usage(Support Typescript)
+### Basic usage (Support Typescript)
 
 Use promise handle the data:
 
@@ -72,9 +72,9 @@ It will crawl the last year(start at today), maybe you want to specify the full 
 async function myContributionsCrawler(username: string) {
   const instance = new GithubContribution(username);
 
-  const intermediateData = await instance.crawl("2023");
+  const data = await instance.crawl("2023");
 
-  return instance.data["2023"];
+  return data;
 }
 ```
 
@@ -99,7 +99,7 @@ async function run(username: string) {
 
 You can find the details about how to use the nodejs built-in module 'path' at [Path - Node.js v18.17.0](https://nodejs.org/dist/latest-v18.x/docs/api/path.html).
 
-Note: by default, an extension name '.json' will be set automatically, and if you specify another one such as '.js', '.txt', etc., it will be reset to '.json'.
+Note: by default, an extension name `.json` will be set automatically, and another extension name such as `.js, .txt, etc.` will be reset to `.json`.
 
 ### Use `github-contribution` with CLI
 
