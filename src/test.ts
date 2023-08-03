@@ -40,7 +40,7 @@ async function run(options: RunOptions) {
   unsubscribe();
 }
 
-const p = join(process.cwd(), "dist", "contributions");
+const p = join( "contributions");
 
 console.log(p);
 

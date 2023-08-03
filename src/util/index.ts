@@ -1,5 +1,5 @@
 import { open } from "fs/promises";
-import { join, parse, ParsedPath } from "path";
+import { isAbsolute, join, parse, ParsedPath } from "path";
 import signale from "signale";
 
 export const signal = signale;
@@ -7,7 +7,10 @@ export const signal = signale;
 const normalizeJsonPath = (path?: ParsedPath | string): string => {
   if (!path) return join(process.cwd(), "contributions.json");
 
-  const parsedPath = typeof path === "string" ? parse(path) : path;
+  const parsedPath =
+    typeof path === "string"
+      ? parse(isAbsolute(path) ? path : join(process.cwd(), path))
+      : path;
 
   const copy = { ...parsedPath };
 
@@ -24,7 +27,10 @@ const normalizeJsonPath = (path?: ParsedPath | string): string => {
 };
 
 // generate JSON file from the string data.
-export const generateJsonFile = async (json: string, path?: string) => {
+export const generateJsonFile = async (
+  json: string,
+  path?: ParsedPath | string
+) => {
   const _path = normalizeJsonPath(path);
 
   let filehandle;
