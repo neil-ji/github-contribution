@@ -32,13 +32,20 @@ async function run(options: RunOptions) {
     await inst.crawl(options.years);
   }
 
-  const filename = await generateJsonFile(JSON.stringify(inst.data));
+  const filename = await generateJsonFile(
+    JSON.stringify(inst.data),
+    options.path
+  );
 
   unsubscribe();
 }
 
+const p = join(process.cwd(), "dist", "contributions");
+
+console.log(p);
+
 run({
   username: "neil-ji",
   // years: ["2023", "2022", "2021"],
-  path: join(process.cwd(), "dist", "contributions"),
+  path: p,
 });
