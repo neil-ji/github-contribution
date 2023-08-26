@@ -1,5 +1,7 @@
 # github-contribution
 
+[中文文档](/README-ZH.md)
+
 A simple and flexible Nodejs library for fetching your github contribution stats.
 
 [![npm](https://img.shields.io/npm/v/github-contribution)](https://badge.fury.io/js/github-contribution) ![GitHub top language](https://img.shields.io/github/languages/top/neil-ji/github-contribution) [![GitHub Repo stars](https://img.shields.io/github/stars/neil-ji/github-contribution?label=Github%20stars)
