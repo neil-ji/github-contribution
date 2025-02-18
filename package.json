@@ -1,7 +1,7 @@
 {
   "name": "github-contribution",
-  "version": "0.3.6",
-  "description": "A  simple and flexible library for fetching your github contribution stats.",
+  "version": "0.3.7",
+  "description": "A simple and flexible library for fetching your github contribution stats.",
   "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
   "author": "neil-ji",
